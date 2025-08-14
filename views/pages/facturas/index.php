@@ -93,9 +93,24 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="btn-group">
                   <a class="btn btn-sm btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" href="#">Estado</a>
                   <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=borrador&csrf_token=<?= csrf_token() ?>">Borrador</a></li>
-                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=emitida&csrf_token=<?= csrf_token() ?>">Emitida</a></li>
-                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=pagada&csrf_token=<?= csrf_token() ?>">Pagada</a></li>
+                      <li><form method="post" action="index.php?p=facturas-estado" class="m-0">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="id" value="<?= (int)$f['id'] ?>">
+        <input type="hidden" name="e" value="borrador">
+        <button type="submit" class="dropdown-item">Borrador</button>
+      </form></li>
+                      <li><form method="post" action="index.php?p=facturas-estado" class="m-0">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="id" value="<?= (int)$f['id'] ?>">
+        <input type="hidden" name="e" value="emitida">
+        <button type="submit" class="dropdown-item">Emitida</button>
+      </form></li>
+                      <li><form method="post" action="index.php?p=facturas-estado" class="m-0">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="id" value="<?= (int)$f['id'] ?>">
+        <input type="hidden" name="e" value="pagada">
+        <button type="submit" class="dropdown-item">Pagada</button>
+      </form></li>
                   </ul>
                 </div>
               </td>

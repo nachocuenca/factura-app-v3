@@ -8,8 +8,8 @@ require_once __DIR__ . '/../../../includes/csrf.php';
 csrf_check();
 
 $uid = (int)$_SESSION['usuario_id'];
-$id  = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$to  = $_GET['to'] ?? 'finalizado';
+$id  = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+$to  = $_POST['to'] ?? 'finalizado';
 if (!in_array($to, ['borrador','finalizado','pagado'], true)) $to = 'finalizado';
 
 // Solo del propietario

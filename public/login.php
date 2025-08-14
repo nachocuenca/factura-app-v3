@@ -4,18 +4,10 @@ require_once __DIR__ . '/../includes/session.php';
 secure_session_start();
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/conexion.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 /* ------------------ helpers ------------------ */
 function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
-function new_csrf_token(): string {
-  $t = bin2hex(random_bytes(32));
-  $_SESSION['csrf_login'] = $t;
-  return $t;
-}
-function check_csrf_token($t): bool {
-  return isset($_SESSION['csrf_login']) && hash_equals($_SESSION['csrf_login'], (string)$t);
-}
-
 /* Si ya hay sesión, vete al dashboard */
 if (!empty($_SESSION['usuario_id'])) {
   header('Location: index.php?p=dashboard');
@@ -25,13 +17,10 @@ if (!empty($_SESSION['usuario_id'])) {
 /* ------------------ manejar POST (login) ------------------ */
 $err = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  csrf_check();
   $email = trim($_POST['email'] ?? '');
   $pass  = (string)($_POST['password'] ?? '');
-  $csrf  = $_POST['csrf'] ?? '';
-
-  if (!check_csrf_token($csrf)) {
-    $err = 'Sesión caducada. Vuelve a intentarlo.';
-  } elseif ($email === '' || $pass === '') {
+  if ($email === '' || $pass === '') {
     $err = 'Introduce tu email y contraseña.';
   } else {
     $st = $pdo->prepare("SELECT id, email, password, nombre, rol, logo,
@@ -59,8 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $_SESSION['serie_abonos']          = $u['serie_abonos'] ?? null;
       $_SESSION['inicio_serie_abonos']   = (int)($u['inicio_serie_abonos'] ?? 1);
 
-      // limpiar token usado
-      unset($_SESSION['csrf_login']);
 
       header('Location: index.php?p=dashboard');
       exit;
@@ -68,8 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 
-/* generar token nuevo para el formulario */
-$csrfToken = new_csrf_token();
 
 /* ------------------ recursos visuales ------------------ */
 $basePublic = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\'); // /factura-app-v3/public
@@ -133,7 +118,7 @@ try {
             <?php endif; ?>
 
             <form method="post" action="login.php" novalidate>
-              <input type="hidden" name="csrf" value="<?= h($csrfToken) ?>">
+              <?php csrf_field(); ?>
 
               <div class="mb-3">
                 <label class="form-label">Email</label>
@@ -157,7 +142,7 @@ try {
             </form>
 
             <div class="text-center mt-3">
-              <a class="small text-muted text-decoration-none" href="logout.php">Cerrar sesión actual</a>
+              <form method="post" action="logout.php" class="d-inline"> <?php csrf_field(); ?> <button type="submit" class="btn btn-link small text-muted text-decoration-none p-0">Cerrar sesión actual</button></form>
             </div>
           </div>
         </div>
