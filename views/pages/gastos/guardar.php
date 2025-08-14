@@ -90,17 +90,17 @@ try {
     }
     $ext = $allow[$mime];
 
-    // Carpeta: /public/uploads/gastos/u{uid}/YYYY/MM
-    $subdir = 'uploads/gastos/u' . $uid . '/' . date('Y') . '/' . date('m');
-    $absDir = realpath(__DIR__ . '/../../../public');
-    if ($absDir === false) { throw new RuntimeException('No existe carpeta /public.'); }
-    $destDir = $absDir . DIRECTORY_SEPARATOR . $subdir;
+    // Carpeta: /uploads/gastos/u{uid}/YYYY/MM
+    $baseDir = __DIR__ . '/../../../uploads';
+    if (!is_dir($baseDir)) { @mkdir($baseDir, 0775, true); }
+    $subdir = 'gastos/u' . $uid . '/' . date('Y') . '/' . date('m');
+    $destDir = $baseDir . DIRECTORY_SEPARATOR . $subdir;
     if (!is_dir($destDir)) { @mkdir($destDir, 0775, true); }
 
     // Nombre único
-    $filename = 'g'.$gid.'_'.date('Ymd_His').'.'.$ext;
+    $filename = bin2hex(random_bytes(16)) . '.' . $ext;
     $destAbs  = $destDir . DIRECTORY_SEPARATOR . $filename;
-    $destRel  = $subdir . '/' . $filename; // lo que guardamos en BD
+    $destRel  = 'uploads/' . $subdir . '/' . $filename; // lo que guardamos en BD
 
     if (!move_uploaded_file($_FILES['archivo']['tmp_name'], $destAbs)) {
       throw new RuntimeException('No se pudo mover el archivo subido.');
