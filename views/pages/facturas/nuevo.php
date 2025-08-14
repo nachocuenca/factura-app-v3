@@ -207,14 +207,18 @@ const fSerieV = document.getElementById('f_serie_preview');
 const fSerie  = document.getElementById('f_serie');
 const fNumV   = document.getElementById('f_numero_preview');
 const fNum    = document.getElementById('f_numero');
-fFecha?.addEventListener('change', () => {
-  const d = new Date(fFecha.value || new Date());
-  if (isNaN(d)) return;
-  const yy = String(d.getFullYear()).slice(-2);
-  fSerieV.value = yy;
-  fSerie.value  = yy;
-  fNumV.value   = '…';
-  fNum.value    = '';
+fFecha?.addEventListener('change', async () => {
+  const d = fFecha.value;
+  try {
+    const res = await fetch('index.php?p=facturas-siguiente_numero&fecha='+encodeURIComponent(d));
+    const js = await res.json();
+    fSerieV.value = js.serie;
+    fSerie.value  = js.serie;
+    fNumV.value   = js.numero;
+    fNum.value    = js.numero;
+  } catch (e) {
+    console.warn('No se pudo obtener numeración', e);
+  }
 });
 
 /* ==== Totales ==== */
