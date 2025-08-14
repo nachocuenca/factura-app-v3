@@ -95,14 +95,14 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <form method="post" action="index.php?p=productos-estado" class="d-inline">
                       <?php csrf_field(); ?>
                       <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                      <input type="hidden" name="a" value="desactivar">
+                      <input type="hidden" name="accion" value="desactivar">
                       <button class="btn btn-sm btn-outline-warning" onclick="return confirm('¿Desactivar este producto?');">Desactivar</button>
                     </form>
                 <?php else: ?>
                     <form method="post" action="index.php?p=productos-estado" class="d-inline">
                       <?php csrf_field(); ?>
                       <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                      <input type="hidden" name="a" value="activar">
+                      <input type="hidden" name="accion" value="activar">
                       <button class="btn btn-sm btn-outline-success" onclick="return confirm('¿Activar este producto?');">Activar</button>
                     </form>
                 <?php endif; ?>
