@@ -13,12 +13,10 @@ composer.lock
 .DS_Store
 Thumbs.db
 
-# Subidas y PDFs (generados)
+# Subidas (generados)
 public/uploads/
 public/assets/img/app-bg*.jpg
 public/assets/img/app-bg*.png
-facturas/
-**/carpeta*/
 
 # Cachés temporales
 /tmp/
