@@ -22,11 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($email === '' || $pass === '') {
     $err = 'Introduce tu email y contraseña.';
   } else {
-    $st = $pdo->prepare("SELECT id, email, password, nombre, rol, logo,
-                                serie_facturas, inicio_serie_facturas,
-                                serie_abonos, inicio_serie_abonos
-                           FROM usuarios
-                          WHERE email = ?
+    $st = $pdo->prepare("SELECT u.id, u.email, u.password, u.nombre, u.rol, u.logo,
+                                u.serie_facturas, u.inicio_serie_facturas,
+                                u.serie_abonos, u.inicio_serie_abonos,
+                                u.role_id, r.nombre AS role_name
+                           FROM usuarios u
+                           LEFT JOIN roles r ON r.id = u.role_id
+                          WHERE u.email = ?
                           LIMIT 1");
     $st->execute([$email]);
     $u = $st->fetch(PDO::FETCH_ASSOC);
@@ -39,7 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $_SESSION['usuario_id']     = (int)$u['id'];
       $_SESSION['usuario_email']  = $u['email'];
       $_SESSION['usuario_nombre'] = $u['nombre'] ?: $u['email'];
-      $_SESSION['usuario_rol']    = $u['rol'] ?: 'cliente';
+      $_SESSION['role_id']        = (int)($u['role_id'] ?? 0);
+      $_SESSION['usuario_rol']    = $u['role_name'] ?: ($u['rol'] ?: 'cliente');
       $_SESSION['usuario_logo']   = $u['logo'] ?: null;
 
       $_SESSION['serie_facturas']        = $u['serie_facturas'] ?? null;
