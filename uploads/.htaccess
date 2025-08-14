@@ -1,0 +1,4 @@
+# Disable script execution in uploads
+Options -ExecCGI
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .pl .py .jsp .asp .sh .cgi
+php_flag engine off

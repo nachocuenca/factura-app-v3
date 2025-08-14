@@ -42,18 +42,16 @@ try {
   $ext = $allow[$mime];
 
   // Directorio destino
-  $subdir = 'uploads/gastos/u' . $uid . '/' . date('Y') . '/' . date('m');
-  $absPublic = realpath(__DIR__ . '/../../../public');
-  if ($absPublic === false) {
-    throw new RuntimeException('No existe carpeta /public.');
-  }
-  $destDir = $absPublic . DIRECTORY_SEPARATOR . $subdir;
+  $baseDir = __DIR__ . '/../../../uploads';
+  if (!is_dir($baseDir)) { @mkdir($baseDir, 0775, true); }
+  $subdir = 'gastos/u' . $uid . '/' . date('Y') . '/' . date('m');
+  $destDir = $baseDir . DIRECTORY_SEPARATOR . $subdir;
   if (!is_dir($destDir)) { @mkdir($destDir, 0775, true); }
 
   // Nombre único
-  $filename = 'g'.$id.'_'.date('Ymd_His').'.'.$ext;
+  $filename = bin2hex(random_bytes(16)) . '.' . $ext;
   $destAbs  = $destDir . DIRECTORY_SEPARATOR . $filename;
-  $destRel  = $subdir . '/' . $filename;
+  $destRel  = 'uploads/' . $subdir . '/' . $filename;
 
   if (!move_uploaded_file($_FILES['archivo']['tmp_name'], $destAbs)) {
     throw new RuntimeException('No se pudo mover el archivo subido.');
@@ -65,7 +63,8 @@ try {
 
   // Borrar adjunto anterior (si existía)
   if (!empty($row['archivo'])) {
-    $oldAbs = $absPublic . DIRECTORY_SEPARATOR . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $row['archivo']);
+    $oldPath = preg_replace('#^uploads/#', '', $row['archivo']);
+    $oldAbs = $baseDir . DIRECTORY_SEPARATOR . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $oldPath);
     if (is_file($oldAbs)) { @unlink($oldAbs); }
   }
 
