@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/csrf.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
@@ -92,11 +93,11 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <a class="btn btn-sm btn-outline-secondary" href="index.php?p=productos-editar&id=<?= (int)$p['id'] ?>">Editar</a>
                 <?php if ((int)$p['activo'] === 1): ?>
                   <a class="btn btn-sm btn-outline-warning"
-                     href="index.php?p=productos-estado&id=<?= (int)$p['id'] ?>&a=desactivar"
+                     href="index.php?p=productos-estado&id=<?= (int)$p['id'] ?>&a=desactivar&csrf_token=<?= csrf_token() ?>"
                      onclick="return confirm('¿Desactivar este producto?');">Desactivar</a>
                 <?php else: ?>
                   <a class="btn btn-sm btn-outline-success"
-                     href="index.php?p=productos-estado&id=<?= (int)$p['id'] ?>&a=activar"
+                     href="index.php?p=productos-estado&id=<?= (int)$p['id'] ?>&a=activar&csrf_token=<?= csrf_token() ?>"
                      onclick="return confirm('¿Activar este producto?');">Activar</a>
                 <?php endif; ?>
               </td>

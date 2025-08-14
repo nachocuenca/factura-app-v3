@@ -1,6 +1,7 @@
 <?php
 // views/pages/gastos/index.php
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/csrf.php';
 
 $uid = (int)$_SESSION['usuario_id'];
 
@@ -177,13 +178,13 @@ function nf($n){ return number_format((float)$n, 2, ',', '.'); }
 
                   <!-- Acciones de estado -->
                   <?php if ($r['estado']!=='pagado'): ?>
-                    <a class="btn btn-outline-success" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=pagado">Pagado</a>
+                    <a class="btn btn-outline-success" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=pagado&csrf_token=<?= csrf_token() ?>">Pagado</a>
                   <?php endif; ?>
                   <?php if ($r['estado']!=='finalizado'): ?>
-                    <a class="btn btn-outline-primary" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=finalizado">Finalizar</a>
+                    <a class="btn btn-outline-primary" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=finalizado&csrf_token=<?= csrf_token() ?>">Finalizar</a>
                   <?php endif; ?>
                   <?php if ($r['estado']!=='borrador'): ?>
-                    <a class="btn btn-outline-secondary" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=borrador">Borrador</a>
+                    <a class="btn btn-outline-secondary" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=borrador&csrf_token=<?= csrf_token() ?>">Borrador</a>
                   <?php endif; ?>
                 </div>
               </td>

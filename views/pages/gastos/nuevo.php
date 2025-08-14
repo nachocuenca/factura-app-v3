@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/csrf.php';
 function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
 // Sugerir categorías previas (texto libre)
@@ -16,6 +17,7 @@ $cats = $st->fetchAll(PDO::FETCH_COLUMN);
 <div class="card shadow-sm">
   <div class="card-body">
     <form method="post" action="index.php?p=gastos-guardar" class="row g-3" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
       <div class="col-md-3">
         <label class="form-label">Fecha</label>
         <input type="date" name="fecha" class="form-control" value="<?= h(date('Y-m-d')) ?>" required>

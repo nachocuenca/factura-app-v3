@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/csrf.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin = is_admin();
 
@@ -12,6 +13,7 @@ if ($isAdmin) {
 ?>
 <div class="card shadow-sm">
   <form class="card-body" method="post" action="index.php?p=clientes-guardar">
+    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
     <?php if ($isAdmin): ?>
       <div class="mb-3">
         <label class="form-label">Propietario</label>
