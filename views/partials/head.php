@@ -4,6 +4,8 @@
 <!-- Solo Bootstrap 5 -->
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9HOAXb7uwZQ0gq9EMgtL9CkCBgNewWWm6yOD87QEAnTWU"
+      crossorigin="anonymous"
       onerror="(function(){
         var css=`:root{--ff:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial}
 body{margin:0;font-family:var(--ff);background:#f8f9fa;color:#212529}

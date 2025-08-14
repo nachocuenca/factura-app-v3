@@ -52,6 +52,8 @@ $current = $_GET['p'] ?? 'dashboard'; // para resaltar activo
 
 <!-- Bootstrap JS con fallback para abrir/cerrar offcanvas si falla el CDN -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tVmxB7ikFMOR9BK1PhvnDnN/SfOc6Bx/6CkXbklaVKgf/mBlC9ZwTe74"
+        crossorigin="anonymous"
         onerror="!function(){document.querySelectorAll('[data-bs-toggle=offcanvas]').forEach(function(b){
           b.addEventListener('click',function(){
             var t=document.querySelector(b.getAttribute('data-bs-target'));
