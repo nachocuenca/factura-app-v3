@@ -77,6 +77,17 @@ Se comprueba **pertenencia de factura** y **cliente** al usuario.
 - Navbar y Sidebar siempre **blancas**.
 - Estilo en `public/assets/css/theme-min.css`.
 
+## Dependencias externas
+- Bootstrap 5.3.3 se carga desde CDN con atributos `integrity` y `crossorigin`.
+- Para actualizar o verificar la versión:
+  1. Descarga el archivo correspondiente.
+  2. Calcula el hash SRI:
+     ```bash
+     openssl dgst -sha384 -binary bootstrap.min.css | openssl base64 -A
+     ```
+  3. Sustituye el valor en `public/login.php`, `views/partials/head.php` y `views/layout.php`.
+- También puedes alojar `bootstrap.min.css` y `bootstrap.bundle.min.js` en `public/assets/` y actualizar los enlaces para usar la copia local.
+
 ## Licencia
 MIT – ver `LICENSE`.
 

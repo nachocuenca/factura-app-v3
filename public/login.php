@@ -80,7 +80,7 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9HOAXb7uwZQ0gq9EMgtL9CkCBgNewWWm6yOD87QEAnTWU" crossorigin="anonymous">
   <!-- Tema Pastel -->
   <link href="assets/css/theme.css?v=1" rel="stylesheet">
 
