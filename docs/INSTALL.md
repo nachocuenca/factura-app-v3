@@ -23,21 +23,26 @@ $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4",$DB_USER,$D
 ]);
 ```
 
-## 5) mPDF (PDF)
+## 5) Directorios de escritura
+- Crea las carpetas `facturas/` y `uploads/` en la raíz del proyecto.
+- Asegura permisos de escritura para el servidor web.
+- Versiona `facturas/` solo con `.gitkeep`; los PDFs generados se ignoran.
+
+## 6) mPDF (PDF)
 ```bash
 composer require mpdf/mpdf
 ```
 
-## 6) Usuario admin
+## 7) Usuario admin
 Genera un hash:
 ```php
 <?php echo password_hash('admin123', PASSWORD_DEFAULT);
 ```
 Inserta en `usuarios` con ese hash (ver `docs/DATABASE.md`).
 
-## 7) Fondo y tema
+## 8) Fondo y tema
 - Pon tu imagen en `public/assets/img/app-bg.jpg`.
 - Asegúrate de cargar `assets/css/theme-min.css` en el layout.
 
-## 8) Acceso
+## 9) Acceso
 `/public/login.php` → Dashboard → Sidebar.
