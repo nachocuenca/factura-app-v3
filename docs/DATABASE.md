@@ -15,6 +15,7 @@ CREATE TABLE usuarios (
   email VARCHAR(100) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   rol ENUM('admin','cliente') DEFAULT 'cliente',
+  role_id INT NULL,
   cif VARCHAR(15) NULL,
   logo VARCHAR(255) NULL,
   creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -25,7 +26,35 @@ CREATE TABLE usuarios (
   pie_factura TEXT NULL,
   notas_factura TEXT NULL,
   color_primario VARCHAR(7) DEFAULT '#000000',
-  fuente_factura VARCHAR(100) NULL
+  fuente_factura VARCHAR(100) NULL,
+  FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+```
+
+## roles
+```sql
+CREATE TABLE roles (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL UNIQUE
+);
+```
+
+## modulos
+```sql
+CREATE TABLE modulos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL UNIQUE
+);
+```
+
+## roles_modulos
+```sql
+CREATE TABLE roles_modulos (
+  role_id INT NOT NULL,
+  modulo_id INT NOT NULL,
+  PRIMARY KEY (role_id, modulo_id),
+  FOREIGN KEY (role_id) REFERENCES roles(id),
+  FOREIGN KEY (modulo_id) REFERENCES modulos(id)
 );
 ```
 

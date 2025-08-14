@@ -4,6 +4,7 @@ secure_session_start();
 require_once __DIR__ . '/../../includes/conexion.php'; // para leer el logo desde BD
 require_once __DIR__ . '/../../includes/csrf.php';
 require_once __DIR__ . '/../../includes/helpers.php';
+require_once __DIR__ . '/../../includes/permissions.php';
 
 // Activo en el menú
 function li_active($key, $current){ return $current === $key ? ' active' : ''; }
@@ -66,6 +67,7 @@ function render_menu($current){
       <span class="me-2">🏠</span> Dashboard
     </a>
 
+    <?php if (has_access('clientes')): ?>
     <div class="mt-3 mb-1 small text-uppercase text-muted px-3">Ventas</div>
     <a class="list-group-item list-group-item-action<?= li_active('clientes-index', $current) ?>" href="index.php?p=clientes-index">
       <span class="me-2">👤</span> Clientes
@@ -73,21 +75,27 @@ function render_menu($current){
     <a class="list-group-item list-group-item-action<?= li_active('clientes-nuevo', $current) ?>" href="index.php?p=clientes-nuevo">
       <span class="me-2">➕</span> Nuevo cliente
     </a>
+    <?php endif; ?>
 
+    <?php if (has_access('productos')): ?>
     <a class="list-group-item list-group-item-action<?= li_active('productos-index', $current) ?>" href="index.php?p=productos-index">
       <span class="me-2">📦</span> Productos
     </a>
     <a class="list-group-item list-group-item-action<?= li_active('productos-nuevo', $current) ?>" href="index.php?p=productos-nuevo">
       <span class="me-2">➕</span> Nuevo producto
     </a>
+    <?php endif; ?>
 
+    <?php if (has_access('facturas')): ?>
     <a class="list-group-item list-group-item-action<?= li_active('facturas-index', $current) ?>" href="index.php?p=facturas-index">
       <span class="me-2">📄</span> Facturas
     </a>
     <a class="list-group-item list-group-item-action<?= li_active('facturas-nuevo', $current) ?>" href="index.php?p=facturas-nuevo">
       <span class="me-2">➕</span> Nueva factura
     </a>
+    <?php endif; ?>
 
+    <?php if (has_access('gastos')): ?>
     <div class="mt-3 mb-1 small text-uppercase text-muted px-3">Gastos</div>
     <a class="list-group-item list-group-item-action<?= li_active('gastos-index', $current) ?>" href="index.php?p=gastos-index">
       <span class="me-2">💳</span> Gastos
@@ -95,11 +103,19 @@ function render_menu($current){
     <a class="list-group-item list-group-item-action<?= li_active('gastos-nuevo', $current) ?>" href="index.php?p=gastos-nuevo">
       <span class="me-2">➕</span> Nuevo gasto
     </a>
+    <?php endif; ?>
 
     <div class="mt-3 mb-1 small text-uppercase text-muted px-3">Sistema</div>
+    <?php if (has_access('config')): ?>
     <a class="list-group-item list-group-item-action<?= li_active('config-index', $current) ?>" href="index.php?p=config-index">
       <span class="me-2">⚙️</span> Configuración
     </a>
+    <?php endif; ?>
+    <?php if (is_admin()): ?>
+    <a class="list-group-item list-group-item-action<?= li_active('config-roles', $current) ?>" href="index.php?p=config-roles">
+      <span class="me-2">👥</span> Roles y permisos
+    </a>
+    <?php endif; ?>
 
     <hr class="my-2">
     <div class="d-grid px-2 pb-2">
