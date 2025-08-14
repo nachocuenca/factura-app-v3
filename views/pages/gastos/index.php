@@ -159,7 +159,8 @@ function nf($n){ return number_format((float)$n, 2, ',', '.'); }
               <td class="text-end"><?= nf($r['total'] ?? 0) ?> €</td>
               <td class="text-center">
                 <?php if (!empty($r['archivo'])): ?>
-                  <a href="<?= htmlspecialchars($r['archivo']) ?>" target="_blank" title="Ver adjunto">📎 Ver</a>
+                  <!-- Enlace seguro vía controlador -->
+                  <a href="index.php?p=gastos-archivo&id=<?= (int)$r['id'] ?>" target="_blank" title="Ver adjunto">📎 Ver</a>
                 <?php else: ?>
                   —
                 <?php endif; ?>
