@@ -1,21 +1,28 @@
 <?php
 // public/logout.php
-if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+require_once __DIR__ . '/../includes/session.php';
+secure_session_start();
 
 // Vaciar sesión
 $_SESSION = [];
 
 // Borrar cookie de sesión
-if (ini_get('session.use_cookies')) {
-  $p = session_get_cookie_params();
-  setcookie(session_name(), '', time() - 42000, $p['path'], $p['domain'], $p['secure'], $p['httponly']);
-}
+$p = session_get_cookie_params();
+setcookie(session_name(), '', [
+  'expires' => time() - 42000,
+  'path' => $p['path'],
+  'domain' => $p['domain'],
+  'secure' => $p['secure'],
+  'httponly' => $p['httponly'],
+  'samesite' => $p['samesite'] ?? 'Lax',
+]);
 
 // Destruir
 session_destroy();
 
-// Regenerar por seguridad
-session_start(); session_regenerate_id(true); session_write_close();
+// Cabeceras para evitar caché
+header('Cache-Control: no-store');
+header('Pragma: no-cache');
 
 // al final de public/logout.php
 $basePublic = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
