@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
 function render($pageTitle, $viewPath, $vars = []) {
   global $pdo;           // <-- importante
-  extract($vars);
+  $cliente = $vars['cliente'] ?? null;
   ob_start();
   require $viewPath;
   $content = ob_get_clean();
