@@ -5,4 +5,4 @@ $options = [
   PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ];
 $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-?>
+
