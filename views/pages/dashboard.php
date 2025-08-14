@@ -5,6 +5,7 @@ secure_session_start();
 require_once __DIR__ . '/../../includes/config.php';
 require_once __DIR__ . '/../../includes/conexion.php';
 require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/../../includes/helpers.php';
 
 $sessionId = (int)($_SESSION['usuario_id'] ?? 0);
 $isAdmin   = is_admin();
@@ -139,8 +140,8 @@ if (isset($_GET['debug'])) {
       <input type="hidden" name="p" value="dashboard">
       <select class="form-select form-select-sm" name="owner_id" onchange="this.form.submit()">
         <?php foreach($users as $u): ?>
-          <option value="<?= (int)$u['id'] ?>" <?= ($ownerId===(int)$u['id']?'selected':'') ?>>
-            #<?= (int)$u['id'] ?> · <?= htmlspecialchars($u['nom']) ?>
+            <option value="<?= (int)$u['id'] ?>" <?= ($ownerId===(int)$u['id']?'selected':'') ?>>
+              #<?= (int)$u['id'] ?> · <?= h($u['nom']) ?>
           </option>
         <?php endforeach; ?>
       </select>
@@ -203,7 +204,7 @@ if (isset($_GET['debug'])) {
           $h = max(6, (int)round(100 * ($pt['value'] / $maxVal))); ?>
           <div class="mini-bar">
             <div class="bar" style="height: <?= $h ?>%;"></div>
-            <div class="lbl"><?= htmlspecialchars(ucfirst($pt['label'])) ?></div>
+            <div class="lbl"><?= h(ucfirst($pt['label'])) ?></div>
           </div>
         <?php endforeach; ?>
       </div>
@@ -229,13 +230,13 @@ if (isset($_GET['debug'])) {
             <?php endif; ?>
             <?php foreach($ultFact as $f): ?>
               <tr>
-                <td><?= htmlspecialchars($f['fecha']) ?></td>
-                <td><?= htmlspecialchars(($f['serie']?:'A').'-'.$f['numero']) ?></td>
-                <td><?= htmlspecialchars($f['cliente']) ?></td>
+                <td><?= h($f['fecha']) ?></td>
+                <td><?= h(($f['serie']?:'A').'-'.$f['numero']) ?></td>
+                <td><?= h($f['cliente']) ?></td>
                 <td class="text-end"><?= nf($f['total']) ?> €</td>
                 <td class="text-end">
                   <?php $cls = $f['estado']==='pagada' ? 'badge-pagada' : ($f['estado']==='emitida' ? 'badge-emitida' : 'badge-borrador'); ?>
-                  <span class="badge-soft <?= $cls ?>"><?= htmlspecialchars(ucfirst($f['estado'])) ?></span>
+                    <span class="badge-soft <?= $cls ?>"><?= h(ucfirst($f['estado'])) ?></span>
                 </td>
                 <td class="text-end">
                   <a class="btn btn-sm btn-outline-primary" href="index.php?p=facturas-generarpdf&id=<?= (int)$f['id'] ?>">Abrir</a>
@@ -271,8 +272,8 @@ if (isset($_GET['debug'])) {
             <?php endif; ?>
             <?php foreach($ultCli as $c): ?>
               <tr>
-                <td><?= htmlspecialchars($c['nombre']) ?></td>
-                <td><?= htmlspecialchars($c['fecha_creacion'] ?: '') ?></td>
+                <td><?= h($c['nombre']) ?></td>
+                <td><?= h($c['fecha_creacion'] ?: '') ?></td>
                 <td class="text-end"><a class="btn btn-sm btn-outline-secondary" href="index.php?p=clientes-editar&id=<?= (int)$c['id'] ?>">Abrir</a></td>
               </tr>
             <?php endforeach; ?>

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
@@ -20,7 +21,7 @@ if ($isAdmin) {
         <select class="form-select" name="owner_id">
           <?php foreach($users as $u): ?>
             <option value="<?= (int)$u['id'] ?>" <?= ((int)$u['id']===$ownerId?'selected':'') ?>>
-              <?= (int)$u['id'] ?> · <?= htmlspecialchars($u['nom']) ?>
+              <?= (int)$u['id'] ?> · <?= h($u['nom']) ?>
             </option>
           <?php endforeach; ?>
         </select>

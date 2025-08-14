@@ -4,6 +4,7 @@ secure_session_start();
 require_once __DIR__ . '/../../../includes/config.php';
 require_once __DIR__ . '/../../../includes/conexion.php';
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 
 $uid = (int)$_SESSION['usuario_id'];
 $id  = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -16,9 +17,6 @@ if (!$gasto) {
   die('Gasto no encontrado o sin permisos');
 }
 
-if (!function_exists('ga_h')) {
-  function ga_h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
-}
 ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h5 class="m-0">Adjuntar archivo — Gasto #<?= (int)$gasto['id'] ?></h5>
@@ -28,24 +26,24 @@ if (!function_exists('ga_h')) {
 <div class="card shadow-sm">
   <div class="card-body">
     <div class="mb-3">
-      <div class="text-muted small">Fecha</div>
-      <div><strong><?= ga_h($gasto['fecha'] ?: '') ?></strong></div>
+        <div class="text-muted small">Fecha</div>
+        <div><strong><?= h($gasto['fecha'] ?: '') ?></strong></div>
     </div>
     <div class="mb-3">
-      <div class="text-muted small">Número / Categoría</div>
-      <div><strong><?= ga_h($gasto['numero'] ?: '—') ?></strong> · <?= ga_h($gasto['categoria'] ?: '—') ?></div>
+        <div class="text-muted small">Número / Categoría</div>
+        <div><strong><?= h($gasto['numero'] ?: '—') ?></strong> · <?= h($gasto['categoria'] ?: '—') ?></div>
     </div>
 
     <?php if (!empty($gasto['archivo'])): ?>
       <div class="mb-3">
         <div class="text-muted small mb-1">Adjunto actual</div>
-        <?php if (preg_match('~\.(jpe?g|png|webp|heic|heif)$~i', $gasto['archivo'])): ?>
-          <a href="<?= ga_h($gasto['archivo']) ?>" target="_blank">
-            <img src="<?= ga_h($gasto['archivo']) ?>" alt="Adjunto actual" style="max-width: 320px; height:auto; border:1px solid #e5e7eb; border-radius:8px;">
+          <?php if (preg_match('~\.(jpe?g|png|webp|heic|heif)$~i', $gasto['archivo'])): ?>
+            <a href="<?= h($gasto['archivo']) ?>" target="_blank">
+              <img src="<?= h($gasto['archivo']) ?>" alt="Adjunto actual" style="max-width: 320px; height:auto; border:1px solid #e5e7eb; border-radius:8px;">
           </a>
-        <?php else: ?>
-          <a href="<?= ga_h($gasto['archivo']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm">Abrir PDF actual</a>
-        <?php endif; ?>
+          <?php else: ?>
+            <a href="<?= h($gasto['archivo']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm">Abrir PDF actual</a>
+          <?php endif; ?>
         <div class="mt-2">
           <a href="index.php?p=gastos-quitar-adjunto&id=<?= (int)$gasto['id'] ?>" class="btn btn-sm btn-outline-danger"
              onclick="return confirm('¿Quitar el adjunto actual?');">Quitar adjunto</a>

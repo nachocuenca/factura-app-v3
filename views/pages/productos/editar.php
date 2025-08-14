@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
@@ -31,7 +32,7 @@ if ($isAdmin) {
         <select class="form-select" name="owner_id">
           <?php foreach($users as $u): ?>
             <option value="<?= (int)$u['id'] ?>" <?= ((int)$u['id']===(int)$p['usuario_id']?'selected':'') ?>>
-              <?= (int)$u['id'] ?> · <?= htmlspecialchars($u['nom']) ?>
+              <?= (int)$u['id'] ?> · <?= h($u['nom']) ?>
             </option>
           <?php endforeach; ?>
         </select>
@@ -41,15 +42,15 @@ if ($isAdmin) {
     <div class="row g-3">
       <div class="col-md-4">
         <label class="form-label">Referencia</label>
-        <input type="text" name="referencia" class="form-control" value="<?= htmlspecialchars($p['referencia'] ?? '') ?>">
+        <input type="text" name="referencia" class="form-control" value="<?= h($p['referencia'] ?? '') ?>">
       </div>
       <div class="col-md-8">
         <label class="form-label">Nombre</label>
-        <input type="text" name="nombre" class="form-control" value="<?= htmlspecialchars($p['nombre']) ?>" required>
+        <input type="text" name="nombre" class="form-control" value="<?= h($p['nombre']) ?>" required>
       </div>
       <div class="col-12">
         <label class="form-label">Descripción</label>
-        <textarea name="descripcion" class="form-control" rows="3"><?= htmlspecialchars($p['descripcion'] ?? '') ?></textarea>
+        <textarea name="descripcion" class="form-control" rows="3"><?= h($p['descripcion'] ?? '') ?></textarea>
       </div>
       <div class="col-md-3">
         <label class="form-label">Precio unitario (€)</label>

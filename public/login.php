@@ -5,9 +5,8 @@ secure_session_start();
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/conexion.php';
 require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
-/* ------------------ helpers ------------------ */
-function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 /* Si ya hay sesión, vete al dashboard */
 if (!empty($_SESSION['usuario_id'])) {
   header('Location: index.php?p=dashboard');

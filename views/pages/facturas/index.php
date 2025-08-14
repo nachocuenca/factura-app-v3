@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
@@ -41,7 +42,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <form class="row g-2 mb-3" method="get" action="index.php">
       <input type="hidden" name="p" value="facturas-index">
       <div class="col-lg-4 col-sm-6">
-        <input class="form-control" type="search" name="q" placeholder="Buscar por nº o cliente" value="<?= htmlspecialchars($q) ?>">
+          <input class="form-control" type="search" name="q" placeholder="Buscar por nº o cliente" value="<?= h($q) ?>">
       </div>
       <div class="col-lg-2 col-6">
         <select class="form-select" name="estado">
@@ -51,8 +52,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <option value="pagada"  <?= $estado==='pagada'?'selected':''; ?>>Pagada</option>
         </select>
       </div>
-      <div class="col-lg-2 col-6"><input class="form-control" type="date" name="fini" value="<?= htmlspecialchars($fini) ?>"></div>
-      <div class="col-lg-2 col-6"><input class="form-control" type="date" name="ffin" value="<?= htmlspecialchars($ffin) ?>"></div>
+        <div class="col-lg-2 col-6"><input class="form-control" type="date" name="fini" value="<?= h($fini) ?>"></div>
+        <div class="col-lg-2 col-6"><input class="form-control" type="date" name="ffin" value="<?= h($ffin) ?>"></div>
       <div class="col-lg-2 col-6 d-grid"><button class="btn btn-primary">Filtrar</button></div>
     </form>
 
@@ -74,9 +75,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <?php endif; ?>
           <?php foreach($rows as $f): ?>
             <tr>
-              <td><?= htmlspecialchars($f['fecha']) ?></td>
-              <td><?= htmlspecialchars(($f['serie'] ?: 'A') . '-' . $f['numero']) ?></td>
-              <td><?= htmlspecialchars($f['cliente']) ?></td>
+                <td><?= h($f['fecha']) ?></td>
+                <td><?= h(($f['serie'] ?: 'A') . '-' . $f['numero']) ?></td>
+                <td><?= h($f['cliente']) ?></td>
               <td class="text-end"><?= number_format((float)$f['base_imponible'], 2, ',', '.') ?> €</td>
               <td class="text-end"><?= number_format((float)$f['total'], 2, ',', '.') ?> €</td>
               <td>

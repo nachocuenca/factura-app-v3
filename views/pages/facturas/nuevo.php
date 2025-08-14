@@ -2,11 +2,11 @@
 // views/pages/facturas/nuevo.php
 require_once __DIR__ . '/../../../includes/auth.php'; // sesión + $pdo
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 
 $uid = (int)$_SESSION['usuario_id'];
 
 /* Helpers */
-function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 function resolver_serie(?string $cfgSerie, string $fecha): string {
   $ts = strtotime($fecha ?: date('Y-m-d'));
   $yy = date('y', $ts);

@@ -2,6 +2,7 @@
 // views/pages/facturas/guardar.php
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 
 csrf_check();
 
@@ -102,12 +103,12 @@ for ($intento = 0; $intento < 2; $intento++) {
       continue; // reintentar una vez
     }
     http_response_code(500);
-    echo "Error al guardar la factura: " . htmlspecialchars($e->getMessage());
+    echo "Error al guardar la factura: " . h($e->getMessage());
     exit;
   } catch (Throwable $e) {
     $pdo->rollBack();
     http_response_code(500);
-    echo "Error al guardar la factura: " . htmlspecialchars($e->getMessage());
+    echo "Error al guardar la factura: " . h($e->getMessage());
     exit;
   }
 }
