@@ -173,6 +173,10 @@ case 'config-logo':         // Logo (multipart/form-data)
 	require __DIR__ . '/../views/pages/gastos/quitar_adjunto.php';
 	break;
 
+	case 'gastos-archivo':
+	require __DIR__ . '/../views/pages/gastos/archivo.php';
+	break;
+
 
   
   default:
