@@ -12,8 +12,7 @@ if (!isset($_SESSION['usuario_id'])) {
   exit;
 }
 
-function render($pageTitle, $viewPath, $vars = []) {
-  global $pdo;           // <-- importante
+function render($pageTitle, $viewPath, PDO $pdo, $vars = []) {
   $cliente = $vars['cliente'] ?? null;
   ob_start();
   require $viewPath;
@@ -31,7 +30,7 @@ switch ($p) {
  
  case 'dashboard':
   $pageTitle = 'Dashboard';
-  render($pageTitle, __DIR__ . '/../views/pages/dashboard.php');
+  render($pageTitle, __DIR__ . '/../views/pages/dashboard.php', $pdo);
   break;
 
 	
@@ -39,12 +38,12 @@ switch ($p) {
 	
 	case 'clientes-index':
 	  $pageTitle = 'Clientes';
-	  render($pageTitle, __DIR__ . '/../views/pages/clientes/index.php');
+          render($pageTitle, __DIR__ . '/../views/pages/clientes/index.php', $pdo);
 	  break;
 
 	case 'clientes-nuevo':
 	  $pageTitle = 'Nuevo cliente';
-	  render($pageTitle, __DIR__ . '/../views/pages/clientes/nuevo.php');
+          render($pageTitle, __DIR__ . '/../views/pages/clientes/nuevo.php', $pdo);
 	  break;
 
 	case 'clientes-guardar':
@@ -53,7 +52,7 @@ switch ($p) {
 
 	case 'clientes-editar':
 	  $pageTitle = 'Editar cliente';
-	  render($pageTitle, __DIR__ . '/../views/pages/clientes/editar.php');
+          render($pageTitle, __DIR__ . '/../views/pages/clientes/editar.php', $pdo);
 	  break;
 
 	case 'clientes-actualizar':
@@ -68,12 +67,12 @@ switch ($p) {
 	
 	case 'productos-index':
 	$pageTitle = 'Productos';
-	render($pageTitle, __DIR__ . '/../views/pages/productos/index.php');
+        render($pageTitle, __DIR__ . '/../views/pages/productos/index.php', $pdo);
 	break;
 
 	case 'productos-nuevo':
 	$pageTitle = 'Nuevo producto';
-	render($pageTitle, __DIR__ . '/../views/pages/productos/nuevo.php');
+        render($pageTitle, __DIR__ . '/../views/pages/productos/nuevo.php', $pdo);
 	break;
 
 	case 'productos-guardar':
@@ -82,7 +81,7 @@ switch ($p) {
 
 	case 'productos-editar':
 	$pageTitle = 'Editar producto';
-	render($pageTitle, __DIR__ . '/../views/pages/productos/editar.php');
+        render($pageTitle, __DIR__ . '/../views/pages/productos/editar.php', $pdo);
 	break;
 
 	case 'productos-actualizar':
@@ -99,12 +98,12 @@ switch ($p) {
 
 case 'facturas-index':
   $pageTitle = 'Facturas';
-  render($pageTitle, __DIR__ . '/../views/pages/facturas/index.php');
+  render($pageTitle, __DIR__ . '/../views/pages/facturas/index.php', $pdo);
   break;
 
 case 'facturas-nuevo':
   $pageTitle = 'Nueva factura';
-  render($pageTitle, __DIR__ . '/../views/pages/facturas/nuevo.php');
+  render($pageTitle, __DIR__ . '/../views/pages/facturas/nuevo.php', $pdo);
   break;
 
 case 'facturas-guardar':
@@ -113,7 +112,7 @@ case 'facturas-guardar':
 
 case 'facturas-generarpdf': // vista HTML tipo "PDF"
   $pageTitle = 'Factura';
-  render($pageTitle, __DIR__ . '/../views/pages/facturas/generar_pdf.php');
+  render($pageTitle, __DIR__ . '/../views/pages/facturas/generar_pdf.php', $pdo);
   break;
 
 case 'facturas-estado': // cambiar borrador/emitida/pagada
@@ -126,7 +125,7 @@ case 'facturas-estado': // cambiar borrador/emitida/pagada
 	
   case 'config-index':
   $pageTitle = 'Configuración';
-  render($pageTitle, __DIR__ . '/../views/pages/config/index.php');
+  render($pageTitle, __DIR__ . '/../views/pages/config/index.php', $pdo);
   break;
 
 case 'config-guardar':      // Perfil / Facturación / Apariencia
@@ -145,12 +144,12 @@ case 'config-logo':         // Logo (multipart/form-data)
   
 	case 'gastos-index':
 	$pageTitle = 'Gastos';
-	render($pageTitle, __DIR__ . '/../views/pages/gastos/index.php');
+        render($pageTitle, __DIR__ . '/../views/pages/gastos/index.php', $pdo);
 	break;
 
 	case 'gastos-nuevo':
 	$pageTitle = 'Nuevo gasto';
-	render($pageTitle, __DIR__ . '/../views/pages/gastos/nuevo.php');
+        render($pageTitle, __DIR__ . '/../views/pages/gastos/nuevo.php', $pdo);
 	break;
 
 	case 'gastos-guardar':
@@ -163,7 +162,7 @@ case 'config-logo':         // Logo (multipart/form-data)
 
 	case 'gastos-adjuntar':
 	$pageTitle = 'Adjuntar archivo a gasto';
-	render($pageTitle, __DIR__ . '/../views/pages/gastos/adjuntar.php');
+        render($pageTitle, __DIR__ . '/../views/pages/gastos/adjuntar.php', $pdo);
 	break;
 
 	case 'gastos-subir-adjunto':
