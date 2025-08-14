@@ -65,52 +65,37 @@ try {
   $gid = (int)$pdo->lastInsertId();
 
   // 2) Subida de archivo (opcional)
-  if (!empty($_FILES['archivo']['name']) && $_FILES['archivo']['error'] === UPLOAD_ERR_OK) {
-    $maxBytes = 15 * 1024 * 1024; // 15 MB
-    if ($_FILES['archivo']['size'] > $maxBytes) {
-      throw new RuntimeException('El archivo supera el tamaño máximo (15 MB).');
+  if (!empty($_FILES['archivo']['name'])) {
+    $file = $_FILES['archivo'];
+    if ($file['error'] === UPLOAD_ERR_OK) {
+      $allowedExt = ['pdf','jpg','jpeg','png','heic'];
+      $maxBytes   = 10 * 1024 * 1024; // 10 MB
+      $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+      if (!in_array($ext, $allowedExt, true)) { throw new RuntimeException('Extensión no permitida'); }
+      if ($file['size'] > $maxBytes) { throw new RuntimeException('Archivo demasiado grande'); }
+      $finfo = new finfo(FILEINFO_MIME_TYPE);
+      $mime  = $finfo->file($file['tmp_name']) ?: 'application/octet-stream';
+      $okMime = (
+        ($ext==='pdf'  && $mime==='application/pdf') ||
+        (in_array($ext,['jpg','jpeg'],true) && in_array($mime,['image/jpeg','image/pjpeg'],true)) ||
+        ($ext==='png'  && $mime==='image/png') ||
+        ($ext==='heic' && strpos($mime,'image/')===0)
+      );
+      if (!$okMime) { throw new RuntimeException('Tipo de archivo inválido'); }
+      $y    = date('Y');
+      $m    = date('m');
+      $base = realpath(dirname(__DIR__, 3)); // raíz del proyecto
+      $dir  = $base . '/uploads/gastos/u' . $uid . '/' . $y . '/' . $m;
+      if (!is_dir($dir)) { mkdir($dir, 0775, true); }
+      $rand = bin2hex(random_bytes(4));
+      $name = date('Ymd-His') . '-' . $rand . '.' . $ext;
+      $dest = $dir . '/' . $name;
+      if (!move_uploaded_file($file['tmp_name'], $dest)) { throw new RuntimeException('No se pudo mover el archivo'); }
+      $rutaRelativa = 'uploads/gastos/u' . $uid . '/' . $y . '/' . $m . '/' . $name;
+      // 3) Guardar ruta relativa
+      $up = $pdo->prepare("UPDATE gastos SET archivo=? WHERE id=? AND usuario_id=?");
+      $up->execute([$rutaRelativa, $gid, $uid]);
     }
-
-    // MIME real
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $mime  = $finfo->file($_FILES['archivo']['tmp_name']) ?: 'application/octet-stream';
-
-    // Permitidos
-    $allow = [
-      'application/pdf' => 'pdf',
-      'image/jpeg'      => 'jpg',
-      'image/png'       => 'png',
-      'image/webp'      => 'webp',
-      // iPhone podría subir HEIC/HEIF; los aceptamos, pero el navegador no los previsualiza siempre.
-      'image/heic'      => 'heic',
-      'image/heif'      => 'heif',
-    ];
-    if (!isset($allow[$mime])) {
-      throw new RuntimeException('Formato no permitido. Sube JPG, PNG, WEBP o PDF.');
-    }
-    $ext = $allow[$mime];
-
-    // Carpeta: /uploads/gastos/u{uid}/YYYY/MM
-    $baseDir = __DIR__ . '/../../../uploads';
-    if (!is_dir($baseDir)) { @mkdir($baseDir, 0775, true); }
-    $subdir = 'gastos/u' . $uid . '/' . date('Y') . '/' . date('m');
-    $destDir = $baseDir . DIRECTORY_SEPARATOR . $subdir;
-    if (!is_dir($destDir)) { @mkdir($destDir, 0775, true); }
-
-    // Nombre único
-    $filename = bin2hex(random_bytes(16)) . '.' . $ext;
-    $destAbs  = $destDir . DIRECTORY_SEPARATOR . $filename;
-    $destRel  = 'uploads/' . $subdir . '/' . $filename; // lo que guardamos en BD
-
-    if (!move_uploaded_file($_FILES['archivo']['tmp_name'], $destAbs)) {
-      throw new RuntimeException('No se pudo mover el archivo subido.');
-    }
-
-    // Seguridad (opcional): impedir ejecución en uploads con .htaccess (ver nota al final)
-
-    // 3) Guardar ruta relativa
-    $up = $pdo->prepare("UPDATE gastos SET archivo=? WHERE id=? AND usuario_id=?");
-    $up->execute([$destRel, $gid, $uid]);
   }
 
   $pdo->commit();
