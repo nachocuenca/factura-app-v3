@@ -34,70 +34,81 @@ function resolver_serie_guardado(?string $cfgSerie, string $fecha): string {
   return $yy;
 }
 
-try {
-  $pdo->beginTransaction();
+for ($intento = 0; $intento < 2; $intento++) {
+  try {
+    $pdo->beginTransaction();
 
-  // Config usuario (por si no está en sesión)
-  $stU = $pdo->prepare("SELECT serie_facturas, inicio_serie_facturas FROM usuarios WHERE id=?");
-  $stU->execute([$uid]);
-  $cfg = $stU->fetch(PDO::FETCH_ASSOC) ?: ['serie_facturas'=>null,'inicio_serie_facturas'=>1];
+    // Config usuario (por si no está en sesión)
+    $stU = $pdo->prepare("SELECT serie_facturas, inicio_serie_facturas FROM usuarios WHERE id=?");
+    $stU->execute([$uid]);
+    $cfg = $stU->fetch(PDO::FETCH_ASSOC) ?: ['serie_facturas'=>null,'inicio_serie_facturas'=>1];
 
-  // Serie definitiva
-  $serie = resolver_serie_guardado($cfg['serie_facturas'] ?? null, $fecha);
+    // Serie definitiva
+    $serie = resolver_serie_guardado($cfg['serie_facturas'] ?? null, $fecha);
 
-  // Número definitivo (FOR UPDATE para evitar colisiones)
-  $stMax = $pdo->prepare("SELECT MAX(CAST(numero AS UNSIGNED)) FROM facturas WHERE usuario_id=? AND serie=? FOR UPDATE");
-  $stMax->execute([$uid, $serie]);
-  $maxN   = (int)$stMax->fetchColumn();
-  $inicio = (int)($cfg['inicio_serie_facturas'] ?? 1);
-  $numero = $maxN > 0 ? $maxN + 1 : max(1, $inicio);
+    // Número definitivo (FOR UPDATE para evitar colisiones)
+    $stMax = $pdo->prepare("SELECT MAX(CAST(numero AS UNSIGNED)) FROM facturas WHERE usuario_id=? AND serie=? FOR UPDATE");
+    $stMax->execute([$uid, $serie]);
+    $maxN   = (int)$stMax->fetchColumn();
+    $inicio = (int)($cfg['inicio_serie_facturas'] ?? 1);
+    $numero = $maxN > 0 ? $maxN + 1 : max(1, $inicio);
 
-  // Insert cabecera
-  $stI = $pdo->prepare("INSERT INTO facturas
-    (usuario_id, cliente_id, fecha, serie, numero, base_imponible, iva, irpf, total, estado, fecha_creacion, fecha_actualizacion)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'emitida', NOW(), NOW())");
-  $stI->execute([$uid, $cliente_id, $fecha, $serie, (string)$numero, $base_imponible, $iva_total, $irpf_total, $total]);
+    // Insert cabecera
+    $stI = $pdo->prepare("INSERT INTO facturas
+      (usuario_id, cliente_id, fecha, serie, numero, base_imponible, iva, irpf, total, estado, fecha_creacion, fecha_actualizacion)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'emitida', NOW(), NOW())");
+    $stI->execute([$uid, $cliente_id, $fecha, $serie, (string)$numero, $base_imponible, $iva_total, $irpf_total, $total]);
 
-  $factura_id = (int)$pdo->lastInsertId();
+    $factura_id = (int)$pdo->lastInsertId();
 
-  // Insert líneas
-  $n = max(count($cantidades), count($precios), count($ivas));
-  for ($i = 0; $i < $n; $i++) {
-    $cantidad = isset($cantidades[$i]) ? (float)$cantidades[$i] : 0;
-    if ($cantidad <= 0) continue;
+    // Insert líneas
+    $n = max(count($cantidades), count($precios), count($ivas));
+    for ($i = 0; $i < $n; $i++) {
+      $cantidad = isset($cantidades[$i]) ? (float)$cantidades[$i] : 0;
+      if ($cantidad <= 0) continue;
 
-    $precio_unit = isset($precios[$i]) ? (float)$precios[$i] : 0;
-    $desc        = isset($descuentos[$i]) ? (float)$descuentos[$i] : 0;
-    $iva_pct     = isset($ivas[$i]) ? (float)$ivas[$i] : 0;
-    $subtotal    = $cantidad * $precio_unit * (1 - $desc/100);
+      $precio_unit = isset($precios[$i]) ? (float)$precios[$i] : 0;
+      $desc        = isset($descuentos[$i]) ? (float)$descuentos[$i] : 0;
+      $iva_pct     = isset($ivas[$i]) ? (float)$ivas[$i] : 0;
+      $subtotal    = $cantidad * $precio_unit * (1 - $desc/100);
 
-    // Nombre/ID producto (opcional)
-    $producto_id = null;
-    $nombre = 'Producto';
-    if (!empty($producto_ids[$i])) {
-      $pid = (int)$producto_ids[$i];
-      $stP = $pdo->prepare("SELECT nombre FROM productos WHERE id=? AND usuario_id=?");
-      $stP->execute([$pid, $uid]);
-      $rowP = $stP->fetch(PDO::FETCH_ASSOC);
-      $producto_id = $pid;
-      $nombre = $rowP ? $rowP['nombre'] : 'Producto';
-    } else {
-      $nombre = trim((string)($producto_nombres[$i] ?? 'Producto'));
-      if ($nombre === '') $nombre = 'Producto';
+      // Nombre/ID producto (opcional)
+      $producto_id = null;
+      $nombre = 'Producto';
+      if (!empty($producto_ids[$i])) {
+        $pid = (int)$producto_ids[$i];
+        $stP = $pdo->prepare("SELECT nombre FROM productos WHERE id=? AND usuario_id=?");
+        $stP->execute([$pid, $uid]);
+        $rowP = $stP->fetch(PDO::FETCH_ASSOC);
+        $producto_id = $pid;
+        $nombre = $rowP ? $rowP['nombre'] : 'Producto';
+      } else {
+        $nombre = trim((string)($producto_nombres[$i] ?? 'Producto'));
+        if ($nombre === '') $nombre = 'Producto';
+      }
+
+      $stL = $pdo->prepare("INSERT INTO factura_productos
+        (factura_id, producto_id, nombre, cantidad, precio_unitario, iva_porcentaje, subtotal, usuario_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+      $stL->execute([$factura_id, $producto_id, $nombre, $cantidad, $precio_unit, $iva_pct, $subtotal, $uid]);
     }
 
-    $stL = $pdo->prepare("INSERT INTO factura_productos
-      (factura_id, producto_id, nombre, cantidad, precio_unitario, iva_porcentaje, subtotal, usuario_id)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stL->execute([$factura_id, $producto_id, $nombre, $cantidad, $precio_unit, $iva_pct, $subtotal, $uid]);
+    $pdo->commit();
+    header('Location: index.php?p=facturas-index&ok=1');
+    exit;
+  } catch (PDOException $e) {
+    $pdo->rollBack();
+    if ($e->errorInfo[1] == 1062 && $intento === 0) {
+      continue; // reintentar una vez
+    }
+    http_response_code(500);
+    echo "Error al guardar la factura: " . htmlspecialchars($e->getMessage());
+    exit;
+  } catch (Throwable $e) {
+    $pdo->rollBack();
+    http_response_code(500);
+    echo "Error al guardar la factura: " . htmlspecialchars($e->getMessage());
+    exit;
   }
-
-  $pdo->commit();
-  header('Location: index.php?p=facturas-index&ok=1');
-  exit;
-
-} catch (Throwable $e) {
-  $pdo->rollBack();
-  http_response_code(500);
-  echo "Error al guardar la factura: " . htmlspecialchars($e->getMessage());
 }
+
