@@ -184,4 +184,4 @@ case 'config-logo':         // Logo (multipart/form-data)
     http_response_code(404);
     echo 'Página no encontrada';
 }
-?>
+
