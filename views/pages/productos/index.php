@@ -92,13 +92,19 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <td class="text-end">
                 <a class="btn btn-sm btn-outline-secondary" href="index.php?p=productos-editar&id=<?= (int)$p['id'] ?>">Editar</a>
                 <?php if ((int)$p['activo'] === 1): ?>
-                  <a class="btn btn-sm btn-outline-warning"
-                     href="index.php?p=productos-estado&id=<?= (int)$p['id'] ?>&a=desactivar&csrf_token=<?= csrf_token() ?>"
-                     onclick="return confirm('¿Desactivar este producto?');">Desactivar</a>
+                    <form method="post" action="index.php?p=productos-estado" class="d-inline">
+                      <?php csrf_field(); ?>
+                      <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
+                      <input type="hidden" name="a" value="desactivar">
+                      <button class="btn btn-sm btn-outline-warning" onclick="return confirm('¿Desactivar este producto?');">Desactivar</button>
+                    </form>
                 <?php else: ?>
-                  <a class="btn btn-sm btn-outline-success"
-                     href="index.php?p=productos-estado&id=<?= (int)$p['id'] ?>&a=activar&csrf_token=<?= csrf_token() ?>"
-                     onclick="return confirm('¿Activar este producto?');">Activar</a>
+                    <form method="post" action="index.php?p=productos-estado" class="d-inline">
+                      <?php csrf_field(); ?>
+                      <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
+                      <input type="hidden" name="a" value="activar">
+                      <button class="btn btn-sm btn-outline-success" onclick="return confirm('¿Activar este producto?');">Activar</button>
+                    </form>
                 <?php endif; ?>
               </td>
             </tr>

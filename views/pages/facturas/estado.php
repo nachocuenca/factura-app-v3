@@ -11,8 +11,8 @@ csrf_check();
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
-$e  = $_GET['e'] ?? 'borrador';
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT) ?: 0;
+$e  = $_POST['e'] ?? 'borrador';
 if (!in_array($e, ['borrador','emitida','pagada'], true)) $e = 'borrador';
 
 if ($isAdmin) {

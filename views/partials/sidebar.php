@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../includes/session.php';
 secure_session_start();
 require_once __DIR__ . '/../../includes/conexion.php'; // para leer el logo desde BD
+require_once __DIR__ . '/../../includes/csrf.php';
 
 // Activo en el menú
 function li_active($key, $current){ return $current === $key ? ' active' : ''; }
@@ -101,10 +102,11 @@ function render_menu($current){
 
     <hr class="my-2">
     <div class="d-grid px-2 pb-2">
-      <a href="<?= htmlspecialchars($logoutHref) ?>" class="btn btn-danger">
-        ⎋ Cerrar sesión
-      </a>
-    </div>
+  <form method="post" action="<?= htmlspecialchars($logoutHref) ?>">
+    <?php csrf_field(); ?>
+    <button type="submit" class="btn btn-danger">⎋ Cerrar sesión</button>
+  </form>
+</div>
   </div>
   <?php
 }

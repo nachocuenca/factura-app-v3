@@ -179,13 +179,28 @@ function nf($n){ return number_format((float)$n, 2, ',', '.'); }
 
                   <!-- Acciones de estado -->
                   <?php if ($r['estado']!=='pagado'): ?>
-                    <a class="btn btn-outline-success" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=pagado&csrf_token=<?= csrf_token() ?>">Pagado</a>
+                      <form method="post" action="index.php?p=gastos-estado" class="d-inline">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                        <input type="hidden" name="to" value="pagado">
+                        <button class="btn btn-outline-success" onclick="return confirm('¿Marcar como pagado?');">Pagado</button>
+                      </form>
                   <?php endif; ?>
                   <?php if ($r['estado']!=='finalizado'): ?>
-                    <a class="btn btn-outline-primary" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=finalizado&csrf_token=<?= csrf_token() ?>">Finalizar</a>
+                      <form method="post" action="index.php?p=gastos-estado" class="d-inline">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                        <input type="hidden" name="to" value="finalizado">
+                        <button class="btn btn-outline-primary" onclick="return confirm('¿Marcar como finalizado?');">Finalizar</button>
+                      </form>
                   <?php endif; ?>
                   <?php if ($r['estado']!=='borrador'): ?>
-                    <a class="btn btn-outline-secondary" href="index.php?p=gastos-estado&id=<?= (int)$r['id'] ?>&to=borrador&csrf_token=<?= csrf_token() ?>">Borrador</a>
+                      <form method="post" action="index.php?p=gastos-estado" class="d-inline">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                        <input type="hidden" name="to" value="borrador">
+                        <button class="btn btn-outline-secondary" onclick="return confirm('¿Marcar como borrador?');">Borrador</button>
+                      </form>
                   <?php endif; ?>
                 </div>
               </td>

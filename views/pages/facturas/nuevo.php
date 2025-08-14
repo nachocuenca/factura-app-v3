@@ -52,7 +52,7 @@ $productos = $stProd->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <form method="post" action="index.php?p=facturas-guardar" id="formFactura" class="row g-3">
-  <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+  <?php csrf_field(); ?>
   <div class="col-md-3">
     <label class="form-label">Fecha</label>
     <input type="date" name="fecha" id="f_fecha" class="form-control" value="<?= h($fecha) ?>">

@@ -13,7 +13,7 @@ if ($isAdmin) {
 ?>
 <div class="card shadow-sm">
   <form class="card-body" method="post" action="index.php?p=clientes-guardar">
-    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+    <?php csrf_field(); ?>
     <?php if ($isAdmin): ?>
       <div class="mb-3">
         <label class="form-label">Propietario</label>

@@ -11,8 +11,8 @@ csrf_check();
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
-$accion = ($_GET['a'] ?? '') === 'activar' ? 'activar' : 'desactivar';
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT) ?: 0;
+$accion = ($_POST['a'] ?? '') === 'activar' ? 'activar' : 'desactivar';
 $nuevo  = $accion === 'activar' ? 1 : 0;
 
 if ($isAdmin) {
