@@ -82,3 +82,13 @@ MIT – ver `LICENSE`.
 
 ## Contribuir
 Lee `CONTRIBUTING.md`. Para vulnerabilidades: `SECURITY.md`.
+
+## Documentación
+
+La carpeta [docs/](docs) incluye guías detalladas:
+
+- [README general](docs/README.md)
+- [Instalación](docs/INSTALL.md)
+- [Esquema de base de datos](docs/DATABASE.md)
+- [PDF](docs/PDF.md)
+- [Tema / Estilo](docs/THEME.md)
