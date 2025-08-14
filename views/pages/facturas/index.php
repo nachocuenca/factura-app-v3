@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/csrf.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
@@ -92,9 +93,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="btn-group">
                   <a class="btn btn-sm btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" href="#">Estado</a>
                   <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=borrador">Borrador</a></li>
-                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=emitida">Emitida</a></li>
-                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=pagada">Pagada</a></li>
+                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=borrador&csrf_token=<?= csrf_token() ?>">Borrador</a></li>
+                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=emitida&csrf_token=<?= csrf_token() ?>">Emitida</a></li>
+                    <li><a class="dropdown-item" href="index.php?p=facturas-estado&id=<?= (int)$f['id'] ?>&e=pagada&csrf_token=<?= csrf_token() ?>">Pagada</a></li>
                   </ul>
                 </div>
               </td>

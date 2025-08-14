@@ -2,6 +2,9 @@
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 require_once __DIR__ . '/../../../includes/config.php';
 require_once __DIR__ . '/../../../includes/conexion.php';
+require_once __DIR__ . '/../../../includes/csrf.php';
+
+csrf_check();
 
 $uid = (int)$_SESSION['usuario_id'];
 $id  = isset($_GET['id']) ? (int)$_GET['id'] : 0;

@@ -1,6 +1,7 @@
 <?php
 // views/pages/facturas/nuevo.php
 require_once __DIR__ . '/../../../includes/auth.php'; // sesión + $pdo
+require_once __DIR__ . '/../../../includes/csrf.php';
 
 $uid = (int)$_SESSION['usuario_id'];
 
@@ -51,6 +52,7 @@ $productos = $stProd->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <form method="post" action="index.php?p=facturas-guardar" id="formFactura" class="row g-3">
+  <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
   <div class="col-md-3">
     <label class="form-label">Fecha</label>
     <input type="date" name="fecha" id="f_fecha" class="form-control" value="<?= h($fecha) ?>">
