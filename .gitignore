@@ -1,0 +1,26 @@
+# PHP
+/vendor/
+/composer.phar
+composer.lock
+
+# Entorno / IDE
+.env
+/.idea/
+/.vscode/
+/*.code-workspace
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Subidas y PDFs (generados)
+public/uploads/
+public/assets/img/app-bg*.jpg
+public/assets/img/app-bg*.png
+facturas/
+**/carpeta*/
+
+# Cachés temporales
+/tmp/
+/cache/
+/storage/

@@ -1,0 +1,95 @@
+/* ======= Minimal Pastel Theme (Básico) ======= */
+:root{
+  --bg: #f7f8fb;               /* respaldo */
+  --text: #2b3440;              /* gris suave */
+  --muted: #6b7280;
+  --border: #e6e9f0;
+
+  --accent-50: #eef3ff;         /* pastel azul pálido */
+  --accent-500: #6e8ef5;
+
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(28,43,68,.06);
+  --shadow-sm: 0 4px 14px rgba(28,43,68,.05);
+}
+
+html, body{
+  min-height:100%;
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+
+  /* Fondo global + niebla */
+  background:
+    linear-gradient(rgba(255,255,255,.72), rgba(255,255,255,.72)),
+    url('../img/app-bg.jpg') center/cover no-repeat fixed,
+    var(--bg);
+}
+
+/* ===== Topbar blanca minimal ===== */
+.topbar{
+  background:#fff !important;
+  border-bottom:1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Centro absoluto del título */
+.topbar .brand-center{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none; z-index:1;
+}
+.topbar .brand-center ~ .brand-center{ display:none !important; } /* evita duplicados */
+.topbar .brand-title{
+  font-weight:800; letter-spacing:.04em;
+  font-size:clamp(1rem, 2.2vw, 1.1rem);
+  text-transform:uppercase;
+  color:#344155;
+}
+
+/* Links topbar */
+.topbar .nav-link{
+  color:#475569; font-weight:600; border-radius:8px;
+  padding:.45rem .7rem;
+}
+.topbar .nav-link:hover,
+.topbar .nav-link.active{ background:var(--accent-50); color:#1f3fd1; }
+
+/* Toggler legible */
+.topbar .navbar-toggler{ border-color:#dfe6f1; }
+.topbar .navbar-toggler:focus{ box-shadow:0 0 0 .2rem rgba(110,142,245,.15); }
+.topbar .navbar-toggler-icon{
+  filter: invert(36%) sepia(6%) saturate(700%) hue-rotate(181deg) brightness(92%) contrast(90%);
+}
+
+/* ===== Sidebar blanca minimal ===== */
+.sidebar-desktop,
+.offcanvas{
+  background:#fff;
+  border-right:1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.list-group-item{
+  border:none; border-radius:8px !important;
+  margin:4px 8px; color:#344155;
+}
+.list-group-item:hover{ background:var(--accent-50); }
+.list-group-item.active{
+  background:var(--accent-50) !important; color:#1f3fd1 !important; font-weight:700;
+}
+
+/* ===== Cards / tablas / formularios ===== */
+.card{ background:#fff; border:1px solid var(--border) !important; border-radius:var(--radius) !important; box-shadow:var(--shadow); }
+.table thead th{ background:#f4f7ff; color:#475569; border-bottom:1px solid var(--border); }
+.table tbody tr:hover{ background:#fbfcff; }
+.form-control, .form-select{ border-color:#dfe6f1; border-radius:10px; }
+.form-control:focus, .form-select:focus{ box-shadow:0 0 0 .25rem rgba(110,142,245,.15); border-color:var(--accent-500); }
+
+/* ===== Botones básicos ===== */
+.btn{ border-radius:10px; font-weight:600; }
+.btn-primary{ background:var(--accent-500); border-color:var(--accent-500); }
+.btn-primary:hover{ filter:brightness(.95); }
+.btn-outline-secondary{ border-color:#cfd7e6; color:#41506a; }
+.btn-outline-secondary:hover{ background:#eef2f9; }
+
+/* ===== Utilidades ===== */
+.small-muted{ color:var(--muted); }
