@@ -4,5 +4,10 @@ $options = [
   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
   PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ];
-$pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+try {
+    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+} catch (PDOException $e) {
+    error_log('Database connection failed: ' . $e->getMessage());
+    exit('Error connecting to the database.');
+}
 
