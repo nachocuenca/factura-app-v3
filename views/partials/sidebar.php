@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../includes/session.php';
 secure_session_start();
 require_once __DIR__ . '/../../includes/conexion.php'; // para leer el logo desde BD
 require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/../../includes/helpers.php';
 
 // Activo en el menú
 function li_active($key, $current){ return $current === $key ? ' active' : ''; }
@@ -54,7 +55,7 @@ function render_menu($current){
   <!-- Cabecera/Logo -->
   <div class="text-center mb-3">
     <?php if ($logoUrl): ?>
-      <img src="<?= htmlspecialchars($logoUrl) ?>" alt="Logo" style="max-width: 150px; height:auto; object-fit:contain;">
+        <img src="<?= h($logoUrl) ?>" alt="Logo" style="max-width: 150px; height:auto; object-fit:contain;">
     <?php else: ?>
       <div class="fw-bold">Factura-app V3</div>
     <?php endif; ?>
@@ -102,7 +103,7 @@ function render_menu($current){
 
     <hr class="my-2">
     <div class="d-grid px-2 pb-2">
-  <form method="post" action="<?= htmlspecialchars($logoutHref) ?>">
+    <form method="post" action="<?= h($logoutHref) ?>">
     <?php csrf_field(); ?>
     <button type="submit" class="btn btn-danger">⎋ Cerrar sesión</button>
   </form>

@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../../includes/session.php';
 secure_session_start();
 require_once __DIR__ . '/../../../includes/config.php';
 require_once __DIR__ . '/../../../includes/conexion.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 
 $uid = (int)$_SESSION['usuario_id'];
 $id  = isset($_POST['id']) ? (int)$_POST['id'] : 0;
@@ -73,5 +74,5 @@ try {
 
 } catch (Throwable $e) {
   http_response_code(400);
-  echo "Error al subir adjunto: " . htmlspecialchars($e->getMessage());
+  echo "Error al subir adjunto: " . h($e->getMessage());
 }

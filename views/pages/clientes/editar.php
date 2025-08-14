@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin = is_admin();
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0;
@@ -31,7 +32,7 @@ if ($isAdmin) {
         <select class="form-select" name="owner_id">
           <?php foreach($users as $u): ?>
             <option value="<?= (int)$u['id'] ?>" <?= ((int)$u['id']===(int)$c['usuario_id']?'selected':'') ?>>
-              <?= (int)$u['id'] ?> · <?= htmlspecialchars($u['nom']) ?>
+              <?= (int)$u['id'] ?> · <?= h($u['nom']) ?>
             </option>
           <?php endforeach; ?>
         </select>
@@ -41,35 +42,35 @@ if ($isAdmin) {
     <div class="row g-3">
       <div class="col-md-6">
         <label class="form-label">Nombre</label>
-        <input type="text" name="nombre" class="form-control" value="<?= htmlspecialchars($c['nombre']) ?>" required>
+        <input type="text" name="nombre" class="form-control" value="<?= h($c['nombre']) ?>" required>
       </div>
       <div class="col-md-3">
         <label class="form-label">CIF/NIF</label>
-        <input type="text" name="cif" class="form-control" value="<?= htmlspecialchars($c['cif']) ?>" required>
+        <input type="text" name="cif" class="form-control" value="<?= h($c['cif']) ?>" required>
       </div>
       <div class="col-md-3">
         <label class="form-label">Teléfono</label>
-        <input type="text" name="telefono" class="form-control" value="<?= htmlspecialchars($c['telefono']) ?>">
+        <input type="text" name="telefono" class="form-control" value="<?= h($c['telefono']) ?>">
       </div>
       <div class="col-12">
         <label class="form-label">Email</label>
-        <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($c['email']) ?>">
+        <input type="email" name="email" class="form-control" value="<?= h($c['email']) ?>">
       </div>
       <div class="col-md-6">
         <label class="form-label">Dirección</label>
-        <input type="text" name="direccion" class="form-control" value="<?= htmlspecialchars($c['direccion']) ?>">
+        <input type="text" name="direccion" class="form-control" value="<?= h($c['direccion']) ?>">
       </div>
       <div class="col-md-2">
         <label class="form-label">CP</label>
-        <input type="text" name="cp" class="form-control" value="<?= htmlspecialchars($c['cp']) ?>">
+        <input type="text" name="cp" class="form-control" value="<?= h($c['cp']) ?>">
       </div>
       <div class="col-md-2">
         <label class="form-label">Localidad</label>
-        <input type="text" name="localidad" class="form-control" value="<?= htmlspecialchars($c['localidad']) ?>">
+        <input type="text" name="localidad" class="form-control" value="<?= h($c['localidad']) ?>">
       </div>
       <div class="col-md-2">
         <label class="form-label">Provincia</label>
-        <input type="text" name="provincia" class="form-control" value="<?= htmlspecialchars($c['provincia']) ?>">
+        <input type="text" name="provincia" class="form-control" value="<?= h($c['provincia']) ?>">
       </div>
 
       <div class="col-md-3">

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../../includes/config.php';
 require_once __DIR__ . '/../../../includes/conexion.php';
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 
 csrf_check();
 
@@ -55,5 +56,5 @@ try {
   exit;
 } catch (Throwable $e) {
   $pdo->rollBack();
-  echo 'Error al actualizar: ' . $e->getMessage();
+  echo 'Error al actualizar: ' . h($e->getMessage());
 }

@@ -1,6 +1,7 @@
 <?php
 // views/pages/facturas/generar_pdf.php
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
@@ -58,8 +59,6 @@ $irpfTot     = round($base * $irpfPercent / 100, 2);
 $totalSrv    = round($base + $ivaTot - $irpfTot, 2);
 
 function nf($n){ return number_format((float)$n, 2, ',', '.'); }
-function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
-
 // Badge por estado
 $badgeClass = 'secondary';
 if ($f['estado']==='emitida') $badgeClass='primary';

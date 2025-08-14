@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 $sessionId = (int)$_SESSION['usuario_id'];
 $isAdmin   = is_admin();
 
@@ -35,8 +36,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <form class="row g-2 mb-3" method="get" action="index.php">
       <input type="hidden" name="p" value="clientes-index">
       <div class="col-lg-6 col-sm-8">
-        <input class="form-control" type="search" name="q" placeholder="Buscar por nombre, CIF, email o teléfono"
-               value="<?= htmlspecialchars($q) ?>">
+          <input class="form-control" type="search" name="q" placeholder="Buscar por nombre, CIF, email o teléfono"
+                 value="<?= h($q) ?>">
       </div>
       <div class="col-lg-3 col-sm-4">
         <select class="form-select" name="estado">
@@ -70,10 +71,10 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <?php endif; ?>
           <?php foreach($rows as $c): ?>
             <tr>
-              <td><?= htmlspecialchars($c['nombre']) ?></td>
-              <td><?= htmlspecialchars($c['cif']) ?></td>
-              <td><?= htmlspecialchars($c['email']) ?></td>
-              <td><?= htmlspecialchars($c['telefono']) ?></td>
+                <td><?= h($c['nombre']) ?></td>
+                <td><?= h($c['cif']) ?></td>
+                <td><?= h($c['email']) ?></td>
+                <td><?= h($c['telefono']) ?></td>
               <td>
                 <?php if ((int)$c['activo'] === 1): ?>
                   <span class="badge bg-success">Activo</span>
@@ -82,7 +83,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endif; ?>
               </td>
               <?php if ($isAdmin): ?>
-                <td><?= htmlspecialchars($c['propietario'] ?: "Usuario #{$c['usuario_id']}") ?></td>
+                  <td><?= h($c['propietario'] ?: "Usuario #{$c['usuario_id']}") ?></td>
               <?php endif; ?>
               <td class="text-end">
                 <a class="btn btn-sm btn-outline-secondary" href="index.php?p=clientes-editar&id=<?= (int)$c['id'] ?>">Editar</a>

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 $uid = (int)$_SESSION['usuario_id'];
 
 // Carga datos del usuario logueado
@@ -8,8 +9,6 @@ $stmt->execute([$uid]);
 $u = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$u) { die('Usuario no encontrado'); }
 
-// helper
-function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 $fuentes = ['system-ui','Arial','Helvetica','Georgia','Times New Roman','Verdana','Tahoma','Courier New','Inter','Roboto'];
 ?>
 <div class="card shadow-sm">

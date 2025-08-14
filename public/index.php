@@ -4,6 +4,7 @@ secure_session_start();
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/conexion.php';
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 // ⬇️ usa tu login real (ruta relativa desde /public)
 if (!isset($_SESSION['usuario_id'])) {

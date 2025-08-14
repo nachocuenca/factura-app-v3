@@ -1,12 +1,13 @@
 <?php
+require_once __DIR__ . '/../includes/helpers.php';
 if (!isset($pageTitle)) $pageTitle = 'Panel';
 $current = $_GET['p'] ?? 'dashboard'; // para resaltar activo
 ?>
 <!doctype html>
 <html lang="es">
 <head>
-  <?php require __DIR__ . '/partials/head.php'; ?>
-  <title><?= htmlspecialchars($pageTitle) ?> GL-APP</title>
+    <?php require __DIR__ . '/partials/head.php'; ?>
+    <title><?= h($pageTitle) ?> GL-APP</title>
 </head>
 <body>
 
@@ -43,7 +44,7 @@ $current = $_GET['p'] ?? 'dashboard'; // para resaltar activo
 
   <main class="flex-grow-1 p-3 p-lg-4">
     <div class="container-fluid">
-      <h1 class="h4 mb-3"><?= htmlspecialchars($pageTitle) ?></h1>
+        <h1 class="h4 mb-3"><?= h($pageTitle) ?></h1>
       <?= $content ?? '' ?>
     </div>
   </main>

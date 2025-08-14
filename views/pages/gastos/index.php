@@ -2,6 +2,7 @@
 // views/pages/gastos/index.php
 require_once __DIR__ . '/../../../includes/auth.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 
 $uid = (int)$_SESSION['usuario_id'];
 
@@ -68,7 +69,7 @@ function nf($n){ return number_format((float)$n, 2, ',', '.'); }
   <input type="hidden" name="p" value="gastos-index">
   <div class="col-auto">
     <label class="form-label">Año</label>
-    <input type="number" name="y" class="form-control" value="<?= htmlspecialchars((string)$y) ?>" style="width:110px">
+    <input type="number" name="y" class="form-control" value="<?= h((string)$y) ?>" style="width:110px">
   </div>
   <div class="col-auto">
     <label class="form-label">Mes</label>
@@ -83,7 +84,7 @@ function nf($n){ return number_format((float)$n, 2, ',', '.'); }
     <select name="cat" class="form-select">
       <option value="">(todas)</option>
       <?php foreach($categorias as $c): ?>
-        <option value="<?= htmlspecialchars($c) ?>" <?= $c===$cat?'selected':'' ?>><?= htmlspecialchars($c) ?></option>
+        <option value="<?= h($c) ?>" <?= $c===$cat?'selected':'' ?>><?= h($c) ?></option>
       <?php endforeach; ?>
     </select>
   </div>
@@ -149,9 +150,9 @@ function nf($n){ return number_format((float)$n, 2, ',', '.'); }
 
           <?php foreach($rows as $r): ?>
             <tr>
-              <td><?= htmlspecialchars($r['fecha'] ?? '') ?></td>
-              <td><?= htmlspecialchars($r['numero'] ?? '') ?></td>
-              <td><?= htmlspecialchars($r['categoria'] ?? '') ?></td>
+              <td><?= h($r['fecha'] ?? '') ?></td>
+              <td><?= h($r['numero'] ?? '') ?></td>
+              <td><?= h($r['categoria'] ?? '') ?></td>
               <td class="text-end"><?= nf($r['base_imponible']) ?> €</td>
               <td class="text-end"><?= nf($r['tipo_iva']) ?></td>
               <td class="text-end"><?= nf($r['iva']) ?> €</td>
@@ -170,7 +171,7 @@ function nf($n){ return number_format((float)$n, 2, ',', '.'); }
                 <?php
                   $cls = $r['estado']==='pagado' ? 'b-pag' : ($r['estado']==='finalizado' ? 'b-fin' : 'b-borr');
                 ?>
-                <span class="badge-soft <?= $cls ?>"><?= htmlspecialchars(ucfirst($r['estado'])) ?></span>
+                <span class="badge-soft <?= $cls ?>"><?= h(ucfirst($r['estado'])) ?></span>
               </td>
               <td class="text-end">
                 <div class="btn-group btn-group-sm">

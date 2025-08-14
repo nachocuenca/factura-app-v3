@@ -4,6 +4,7 @@ secure_session_start();
 require_once __DIR__ . '/../../../includes/config.php';
 require_once __DIR__ . '/../../../includes/conexion.php';
 require_once __DIR__ . '/../../../includes/csrf.php';
+require_once __DIR__ . '/../../../includes/helpers.php';
 
 csrf_check();
 
@@ -105,5 +106,5 @@ try {
 } catch (Throwable $e) {
   if ($pdo->inTransaction()) $pdo->rollBack();
   http_response_code(500);
-  echo "Error al guardar el gasto: " . htmlspecialchars($e->getMessage());
+  echo "Error al guardar el gasto: " . h($e->getMessage());
 }
